@@ -4,6 +4,8 @@
  * Date: 27/09/2014
  * Twitter: @RomanoTulioHec
  * Web Page: http://www.tulio-wiki.com.ar
+ * GitHub: https://github.com/TulioHector/ko-gridtable
+ * Licence: GPL 3.0
  */
 ;
 'use strict';
@@ -13,7 +15,6 @@ var koGridTable = function (options)
     $this = this;
     var opt = options || {};
     $this.url = opt.Url || "";
-    //$this.customItems = opt.CustomItems || null;
     $this.customHandler = opt.CustomHandler || null;
     $this.hiddenColumn = opt.HiddenColumn || [];
     $this.editUrl = opt.UrlEdit || "";
@@ -37,6 +38,7 @@ var koGridTable = function (options)
     $this.pageSize = ko.observable(10);
     $this.currentPageIndex = ko.observable(0);
     $this.contacts = ko.observableArray([]);
+    $this.totalPages = ko.observable();
     $this.sortType = "asc";
     $this.currentColumn = ko.observable("");
     $this.iconType = ko.observable("");
@@ -306,12 +308,14 @@ var koGridTable = function (options)
                 htmlPaging += "<option value=\""+(num2)+"\">"+(num2)+"</option>";
                 acum = num2;
             }
+            
             htmlPaging += "</select></td>";
             htmlPaging += "<td colspan=\"6\">";
             htmlPaging += "<button data-bind=\"click: previousPage\" class=\"btn\"><i class=\"fa fa-angle-double-left\"></i></button>";
-            htmlPaging += "Page<label data-bind=\"text: currentPageIndex() + 1\" class=\"badge\"></label>";
+            htmlPaging += $this.pagings.NamePages+"<label data-bind=\"text: currentPageIndex() + 1\" class=\"badge\"></label>";
+            htmlPaging += $this.pagings.NameTotalPages+"<label data-bind=\"text: totalPages() + 1\" class=\"badge\"></label>";
             htmlPaging += "<button data-bind=\"click: nextPage\" class=\"btn\"><i class=\"fa fa-angle-double-right\"></i></button>";
-            htmlPaging += "Total: <label data-bind=\"text: totalRows() \" class=\"badge\"></label>";
+            htmlPaging += $this.pagings.NameTotalCount+"<label data-bind=\"text: totalRows() \" class=\"badge\"></label>";
             htmlPaging += "</td></tr>";
             scriptPaging.innerHTML = htmlPaging;
             document.head.appendChild(scriptPaging);
@@ -347,14 +351,11 @@ var koGridTable = function (options)
     };
 
     $this.currentPage = ko.computed(function () {
-        var pagesize = parseInt($this.pageSize(), 10);
-        var startIndex = pagesize * $this.currentPageIndex();
-        var endIndex = startIndex + pagesize;
-        return $this.contacts.slice(startIndex, endIndex);
+        return $this.contacts();
     });
     $this.nextPage = function () {
-        $this.load();
-        if ((($this.currentPageIndex() + 1) * $this.pageSize()) < $this.contacts().length)
+        var totalCount = parseInt($this.totalRows());
+        if ((($this.currentPageIndex() + 1) * $this.pageSize()) < totalCount)
         {
             $this.currentPageIndex($this.currentPageIndex() + 1);
         }
@@ -362,17 +363,19 @@ var koGridTable = function (options)
         {
             $this.currentPageIndex(0);
         }
+        $this.load();
     };
     $this.previousPage = function () {
-        $this.load();
+        var totalCount = parseInt($this.totalRows());
         if ($this.currentPageIndex() > 0)
         {
             $this.currentPageIndex($this.currentPageIndex() - 1);
         }
         else
         {
-            $this.currentPageIndex((Math.ceil($this.contacts().length / $this.pageSize())) - 1);
+            $this.currentPageIndex((Math.ceil(totalCount / $this.pageSize())) - 1);
         }
+        $this.load();
     };
     $this.sortTable = function (viewModel, e) {
         var orderProp = $(e.target).attr("data-column");
@@ -430,6 +433,7 @@ var koGridTable = function (options)
     };
 
     $this.load = function () {
+        
         var data = {
             $orderby: $this.currentColumn() + ' ' + $this.sortType,
             $top: $this.pageSize(),
@@ -446,20 +450,17 @@ var koGridTable = function (options)
         {
             var data = result[0];
             var dataRows = data.Rows;
-
+            $this.contacts([]);
             $this.totalRows(data.TotalRows);
             $this.contacts(dataRows);
-
-            $('table thead th').map(function () {
-                $this.Columns.push($(this));
-            });
-            $this.IsHiddenColumn();
+            
+            var calcTotalPage = Math.ceil( ( data.TotalRows / $this.pageSize() ) ) - 1;            
+            $this.totalPages(calcTotalPage);
         });
     };
 
     $this.buidItemModel();
     $this.buildTemplate();
-    //$this.load();
 };
 
 ko.bindingHandlers.setCheckboxValue = {
