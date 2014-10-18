@@ -448,7 +448,7 @@ var koGridTable = function (options)
             data: {grid: JSON.stringify(data)}
         }).done(function (result)
         {
-            var data = result[0];
+            var data = result;
             var dataRows = data.Rows;
             $this.contacts([]);
             $this.totalRows(data.TotalRows);
@@ -474,5 +474,29 @@ ko.bindingHandlers.setCheckboxValue = {
           }
       }
 };
+function callMethos() {
+    var me = this;
+    var result;
+
+    this.call = function(opt) {
+        var opt = opt || {};
+        vUrl = opt.Url || "";
+        vParam = opt.Param || {};
+        vDataType = opt.dataType || 'json';
+        vType = opt.Type || "POST";
+        vAsync = opt.Async || true;
+
+        var _ajax = $.ajax({
+                type: vType,
+                dataType: vDataType,
+                data: vParam,
+                url: vUrl,
+                async: vAsync,
+                cache: false
+            });
+        
+        me.result = _ajax;
+    };
+}
 
 ;

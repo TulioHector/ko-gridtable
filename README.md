@@ -9,4 +9,5 @@ Funcionalidades hasta el momento.
 * Paginado
 * Ordenamiento por columnas
 * Edicion Inline
+    * Sopoerte de combobox y checkbox
 * Mostrar error con alertas bootstrap
