@@ -435,9 +435,9 @@ var koGridTable = function (options)
     $this.load = function () {
         
         var data = {
-            $orderby: $this.currentColumn() + ' ' + $this.sortType,
-            $top: $this.pageSize(),
-            $skip: $this.currentPageIndex() * $this.pageSize(),
+            orderby: $this.currentColumn() + ' ' + $this.sortType,
+            top: $this.pageSize(),
+            skip: $this.currentPageIndex() * $this.pageSize(),
             "pageIndex": $this.currentPageIndex(),
             "pageSize": $this.pageSize()
         };

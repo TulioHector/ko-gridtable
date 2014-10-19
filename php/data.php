@@ -17,7 +17,7 @@ for($i = 0; $i < 100; $i++){
     );
 }
 
-$a = array_slice($result, $jsonData['$skip'], $jsonData['pageSize']);
+$a = array_slice($result, $jsonData['skip'], $jsonData['pageSize']);
 
 $data = array(
     'TotalRows' => $i,
