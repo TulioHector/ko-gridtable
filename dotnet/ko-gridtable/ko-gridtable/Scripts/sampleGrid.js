@@ -6,7 +6,7 @@ $(function() {
         Url: "/api/Data",
         UrlEdit: "api/Data",
         UrlAddItem: "/api/Data",
-        //UrlDeleteItem:"./?usuario/DeleteUser",
+        UrlDeleteItem: "api/Data",
         Columns: [
             { Name: 'Name', Type: 'text' },
             { Name: 'LastName', Type: 'text' },

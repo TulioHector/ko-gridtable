@@ -48,9 +48,16 @@ namespace ko_gridtable.Controllers
         }
 
         [HttpDelete]
-        public void Delete()
+        public void Delete(UserModel row)
         {
-
+            if (row != null)
+            {
+                var item = (from u in _db.Users
+                    where u.Id == row.Id
+                    select u).First();
+                _db.Users.Remove(item);
+                _db.SaveChanges();
+            }
         }
     }
 }

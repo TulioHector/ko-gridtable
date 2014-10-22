@@ -62,13 +62,11 @@ var koGridTable = function (options) {
         $this.RemoveItem(itemToDelete);
     };
     $this.RemoveItem = function (itemToDelete) {
-        var data = { row: itemToDelete };
-
         var obj = new callMethod();
         obj.call({
             Url: $this.deleteUrl,
-            Type: 'POST',
-            Param: $this.GetDataToSend(data)
+            Type: 'DELETE',
+            Param: JSON.stringify(itemToDelete)
         });
         obj.result.done(function (data) {
             if (data.type === "error") {
@@ -183,8 +181,6 @@ var koGridTable = function (options) {
                 }
             });
         } else {
-            var dataObj = { row: rowdata };
-
             obj.call({
                 Url: $this.editUrl,
                 Type: 'PUT',
