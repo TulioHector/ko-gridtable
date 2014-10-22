@@ -30,3 +30,7 @@ C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\Antlr3.Runtime.pdb
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\obj\Debug\ko-gridtable.csprojResolveAssemblyReference.cache
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\obj\Debug\ko-gridtable.dll
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\obj\Debug\ko-gridtable.pdb
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.SqlServer.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.xml
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.SqlServer.xml

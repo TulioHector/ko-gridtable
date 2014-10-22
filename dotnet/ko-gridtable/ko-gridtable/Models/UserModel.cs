@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ko_gridtable.Models
 {
-    public sealed class UserModel
+    public class UserModel
     {
         public string Name { get; set; }
 

@@ -1,15 +1,18 @@
-﻿namespace ko_gridtable.Models
+﻿using System;
+
+namespace ko_gridtable.Models
 {
+    [Serializable]
     public class GridPaging
     {
-        public string orderby { get; set; }
+        public string Orderby { get; set; }
 
-        public int top { get; set; }
+        public int Top { get; set; }
 
-        public int skip { get; set; }
+        public int Skip { get; set; }
 
-        public int pageIndex { get; set; }
+        public int PageIndex { get; set; }
 
-        public int pageSize { get; set; }
+        public int PageSize { get; set; }
     }
 }

@@ -1,38 +1,56 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Script.Serialization;
+using ko_gridtable.Context;
 using ko_gridtable.Models;
+using Newtonsoft.Json;
 
 namespace ko_gridtable.Controllers
 {
     public class DataController : ApiController
     {
-        public IList<UserModel> List = new List<UserModel>();
-        public ResultGrid GetData(string grid)
+        private KoGridTableContext _db = new KoGridTableContext();
+        //public IList<UserModel> List = new List<UserModel>();
+
+        [HttpGet]
+        public ResultGrid GetData(string @orderby, int pageIndex, int pageSize, int skip, int top)
         {
-            var jsonSerializer = new JavaScriptSerializer();
-            var paging = jsonSerializer.Deserialize<GridPaging>(grid);
-            for (var i = 0; i < 100; i++)
-            {
-                var model = new UserModel
-                {
-                    Email = string.Format("Email_{0}@company.com", i),
-                    Id = i,
-                    LastName = string.Format("LastName_{0}", i),
-                    Name = string.Format("Name_{0}", i)
-                };
-                List.Add(model);
-            }
-            
+            var list = (from u in _db.Users
+                select u).ToList();
             var result = new ResultGrid
             {
-                TotalRows = List.Count,
-                Rows = List.Skip(paging.skip).Take(paging.pageSize).ToList()
+                TotalRows = list.Count,
+                Rows = list.Skip(skip).Take(pageSize).ToList()
             };
             return result;
         }
 
-        
+        [HttpPost]
+        public void Post(UserModel row)
+        {
+            if (row != null)
+            {
+                _db.Users.Add(row);
+                _db.SaveChanges();
+            }
+        }
+
+        [HttpPut]
+        public void Put(UserModel row)
+        {
+            if (row != null)
+            {
+                _db.Users.AddOrUpdate(row);
+                _db.SaveChanges();
+            }
+        }
+
+        [HttpDelete]
+        public void Delete()
+        {
+
+        }
     }
 }
