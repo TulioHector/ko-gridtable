@@ -6,7 +6,7 @@
  * Web Page: http://www.tulio-wiki.com.ar
  * GitHub: https://github.com/TulioHector/ko-gridtable
  * Licence: GPL 3.0
- * Version: 0.0.8
+ * Version: 0.0.9
  */
 ;
 'use strict';
