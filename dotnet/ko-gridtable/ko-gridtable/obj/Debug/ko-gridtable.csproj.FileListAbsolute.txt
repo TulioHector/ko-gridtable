@@ -34,3 +34,4 @@ C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.dl
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.SqlServer.dll
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.xml
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.SqlServer.xml
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\WebActivatorEx.dll

@@ -12,6 +12,8 @@ $(function() {
             { Name: 'LastName', Type: 'text' },
             { Name: 'Email', Type: 'text' },
             { Name: 'Id', Type: 'number', Hidden: true },
+            { Name: 'Activo', Type: 'checkbox' },
+            { Name: 'Sexo', Type: 'select', DataSourceUrl: '/api/ComboBox', DataText: 'Description', DataValue: 'Id', OptionsCaption: 'Elegir' },
             { Name: 'Actions', Type: 'html', CustomColumn: true, EnableAbm: true }
         ],
         EnableEditInline: true,

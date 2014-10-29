@@ -6,7 +6,7 @@
  * Web Page: http://www.tulio-wiki.com.ar
  * GitHub: https://github.com/TulioHector/ko-gridtable
  * Licence: GPL 3.0
- * Version: 0.0.9
+ * Version: 0.0.11
  */
 ;
 'use strict';
@@ -30,7 +30,7 @@ var koGridTable = function (options) {
     $this.CmbModel = {};
 
     $this.Columns = [];
-    $this.cmbRol = ko.observableArray([]);
+    //$this.cmbRol = ko.observableArray([]);
     $this.combosSources = [];
     $this.selectedChoice = ko.observable();
     $this.selectedChoicePaging = ko.observable();
@@ -69,7 +69,7 @@ var koGridTable = function (options) {
             Param: JSON.stringify(itemToDelete)
         });
         obj.result.done(function (data) {
-            if (data.type === "error") {
+            if (data.Type === "error") {
                 //commit(false);
                 $this.DisplayAlert(data.msj, "danger");
             } else {
@@ -112,17 +112,6 @@ var koGridTable = function (options) {
         $this.load();
     });
 
-    $this.GetTextValueCmb = function (cmbItems, idValue) {
-        var _cmbItems = cmbItems();
-        var _value = idValue;
-        for (var i = 0; i < _cmbItems.length; i++) {
-            var item = _cmbItems[i];
-            if (item.Id() === _value) {
-                return item.Descripcion();
-            }
-        }
-    };
-
     $this.DisplayAlert = function (msg, type) {
         var alert = document.getElementById("alertKoGridTable");
 
@@ -155,26 +144,40 @@ var koGridTable = function (options) {
     $this.save = function (row) {
         var rowdata = $this.selectedItem();
         var isAddRow = (typeof (rowdata.Id) === "function");
-        var idRolSelected = $this.selectedChoice();
+        var idSelected = $this.selectedChoice();
         var obj = new callMethod();
 
-        if (isAddRow) {
-            var props = Object.getOwnPropertyNames(rowdata);
-            var dataObj = {};
-
-            for (var key in props) {
-                dataObj[props[key]] = escape(rowdata[props[key]]());
+        $.each($this.columns, function (key, value) {
+            if (value.Type === 'select') {
+                var val = row[value.Name];
+                var cmbObj = {};
+                cmbObj[value.DataValue] = idSelected;
+                cmbObj[value.DataText] = "";
+                if (typeof val === 'function') {
+                    row[value.Name](cmbObj);
+                } else {
+                    row[value.Name] = cmbObj;
+                }
             }
-
+        });
+        
+        if (isAddRow) {
+            var props = Object.getOwnPropertyNames(row);
+            var dataObj = {};
+            
+            for (var key in props) {
+                dataObj[props[key]] = row[props[key]]();
+            }
+            
             obj.call({
                 Url: $this.addUrl,
                 Type: 'POST',
                 Param: JSON.stringify(dataObj)
             });
             obj.result.done(function (data) {
-                if (data.type === "error") {
+                if (data.Type === "error") {
                     //commit(false);
-                    $this.DisplayAlert(data.msj, "danger");
+                    $this.DisplayAlert(data.Message, "danger");
                 } else {
                     //commit(true);                    
                     $this.load();
@@ -187,16 +190,16 @@ var koGridTable = function (options) {
                 Param: JSON.stringify(row)
             });
             obj.result.done(function (data) {
-                if (data.type === "error") {
+                if (data.Type === "error") {
                     //commit(false);
-                    $this.DisplayAlert(data.msj, "danger");
+                    $this.DisplayAlert(data.Message, "danger");
                 } else {
                     //commit(true);
                     $this.load();
                 }
             });
         }
-
+        
         $this.selectedItem(null);
     };
     $this.templateToUse = function (item) {
@@ -258,7 +261,7 @@ var koGridTable = function (options) {
                         htmlEdit += '<td>';
                         switch (value.Type) {
                             case "select":
-                                var databind = 'options: $root.getCombosSources(\'' + value.Name + '\'), optionsText: \'' + value.DataText + '\', optionsValue: \'' + value.DataValue + '\', value: $root.selectedChoice , optionsCaption: \'Elegir..\' ';
+                                var databind = 'options: $root.getCombosSources(\'' + value.Name + '\'), optionsText: \'' + value.DataText + '\', optionsValue: \'' + value.DataValue + '\', value: $root.selectedChoice , optionsCaption: \'' + value.OptionsCaption + '\' ';
                                 htmlEdit += "<select class=\"cmb_" + value.Name + " form-control input-sm\" data-bind=\"" + databind + "\"></select></td>";
                                 break;
                             case "checkbox":
@@ -402,7 +405,7 @@ var koGridTable = function (options) {
             async: false,
             success: function (data) {
                 var array = [];
-                $.each($.parseJSON(data), function (index, value) {
+                $.each(data, function (index, value) {
                     var m = {};
                     m[model.DataText] = ko.observable(value[model.DataText]);
                     m[model.DataValue] = ko.observable(value[model.DataValue]);
@@ -422,7 +425,7 @@ var koGridTable = function (options) {
                 case "select":
                     $this.CmbModel[value.DataText] = ko.observable(value.DataText);
                     $this.CmbModel[value.DataValue] = ko.observable(value.DataValue);
-                    $this.GetDataSourece(value.DataSourceUrl, "post", value);
+                    $this.GetDataSourece(value.DataSourceUrl, "get", value);
                     $this.RowItem[value.Name] = ko.observable(value.Name);
                     break;
                 default:
@@ -434,9 +437,9 @@ var koGridTable = function (options) {
     };
 
     $this.load = function () {
-
+        var order = $this.currentColumn();
         var data = {
-            Orderby: escape($this.currentColumn() + ' ' + $this.sortType),
+            Orderby: order !== "" ? escape($this.currentColumn() + ' ' + $this.sortType) : null,
             Top: $this.pageSize(),
             Skip: $this.currentPageIndex() * $this.pageSize(),
             PageIndex: $this.currentPageIndex(),
@@ -459,15 +462,31 @@ var koGridTable = function (options) {
         });
     };
 
+    $this._stringToBoolean = function (string) {
+        var isBoolean = typeof string == 'boolean';
+        if (isBoolean) {
+            return string;
+        }
+        if (typeof string === 'function') {
+            return false;
+        }
+        switch (string.toLowerCase()) {
+            case "true": case "yes": case "1": return true;
+            case "false": case "no": case "0": case null: return false;
+            default: return Boolean(string);
+        }
+    }
+
     $this.buidItemModel();
     $this.buildTemplate();
 };
 
 ko.bindingHandlers.setCheckboxValue = {
-    update: function (element, valueAccessor, allBindingsAccessor) {
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var el = $(element);
         var value = ko.utils.unwrapObservable(valueAccessor());
-        if (value.text === "1") {
+        
+        if (bindingContext.$root._stringToBoolean(value.text)) {
             el.prop('checked', true);
         } else {
             el.prop('checked', false);
@@ -479,7 +498,6 @@ function callMethod() {
     var result;
 
     this.call = function (opt) {
-        console.log("hfasd");
         var opt = opt || {};
         vUrl = opt.Url || "";
         vParam = opt.Param || {};

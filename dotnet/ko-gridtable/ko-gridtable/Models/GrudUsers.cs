@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ko_gridtable.Models
 {
-    public class UserModel
+    public class GrudUsers
     {
         public string Name { get; set; }
 
@@ -14,5 +14,9 @@ namespace ko_gridtable.Models
         public string Email { get; set; }
 
         public int Id { get; set; }
+
+        public string Sexo { get; set; }
+
+        public bool Activo { get; set; }
     }
 }

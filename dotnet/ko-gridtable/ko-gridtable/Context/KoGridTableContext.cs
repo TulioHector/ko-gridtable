@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity;
 using ko_gridtable.Models;
 
 namespace ko_gridtable.Context
@@ -15,5 +11,6 @@ namespace ko_gridtable.Context
         }
 
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<ComboSexo> Sexo { get; set; }
     }
 }

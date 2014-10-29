@@ -1,62 +1,112 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 using ko_gridtable.Context;
+using ko_gridtable.Extensions;
 using ko_gridtable.Models;
-using Newtonsoft.Json;
 
 namespace ko_gridtable.Controllers
 {
     public class DataController : ApiController
     {
-        private KoGridTableContext _db = new KoGridTableContext();
-        //public IList<UserModel> List = new List<UserModel>();
+        private readonly KoGridTableContext _db = new KoGridTableContext();
 
         [HttpGet]
-        public ResultGrid GetData(string @orderby, int pageIndex, int pageSize, int skip, int top)
+        public async Task<ResultGrid> GetData(string @orderby, int pageIndex, int pageSize, int skip, int top)
         {
             var list = (from u in _db.Users
-                select u).ToList();
+                        join c in _db.Sexo on u.Sexo.Id equals c.Id into cs
+                        from ss in cs.DefaultIfEmpty()
+                orderby u.Id
+                select new GrudUsers
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    Activo = u.Activo,
+                    LastName = u.LastName,
+                    Name = u.Name,
+                    Sexo = ss.Description
+                }).AsQueryable();
+
+            var rowCount = list.Count();
+
+            if (!String.IsNullOrEmpty(@orderby))
+            {
+                var order = Uri.UnescapeDataString(@orderby).Split(' ');
+                var descending = order[1] == "desc";
+                list = list.OrderByField(order[0], descending);
+            }
+
             var result = new ResultGrid
             {
-                TotalRows = list.Count,
-                Rows = list.Skip(skip).Take(pageSize).ToList()
+                TotalRows = rowCount,
+                Rows = await list.Paging(pageSize, pageIndex).ToListAsync()
             };
             return result;
         }
 
         [HttpPost]
-        public void Post(UserModel row)
+        public HttpResponseMessage Post(UserModel row)
         {
-            if (row != null)
+            try
             {
+                var sexo = (from s in _db.Sexo
+                            where s.Id == row.Sexo.Id
+                            select s).First();
+                row.Sexo = sexo;
                 _db.Users.Add(row);
                 _db.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, new ResponseGrid { Message = "registro agregado", Type = "success" });
             }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, new ResponseGrid { Message = ex.Message, Type = "error" });
+            }
+            
         }
 
         [HttpPut]
-        public void Put(UserModel row)
+        public HttpResponseMessage Put(UserModel row)
         {
-            if (row != null)
+            try
             {
-                _db.Users.AddOrUpdate(row);
+                var user = (from u in _db.Users
+                    where u.Id == row.Id
+                    select u).First();
+                var sexo = (from s in _db.Sexo
+                    where s.Id == row.Sexo.Id
+                    select s).First();
+                user.Sexo = sexo;
+                _db.Users.AddOrUpdate(user);
                 _db.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, new ResponseGrid { Message = "registro actualizado", Type = "success" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, new ResponseGrid { Message = ex.Message, Type = "error"});
             }
         }
 
         [HttpDelete]
-        public void Delete(UserModel row)
+        public HttpResponseMessage Delete(UserModel row)
         {
-            if (row != null)
+            try
             {
                 var item = (from u in _db.Users
-                    where u.Id == row.Id
-                    select u).First();
+                            where u.Id == row.Id
+                            select u).First();
                 _db.Users.Remove(item);
                 _db.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, new ResponseGrid { Message = "registro eliminado", Type = "success" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, new ResponseGrid { Message = ex.Message, Type = "error" });
             }
         }
     }

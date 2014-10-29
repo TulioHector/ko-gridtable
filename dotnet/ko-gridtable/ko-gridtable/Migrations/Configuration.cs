@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ko_gridtable.Context;
 using ko_gridtable.Models;
 
 namespace ko_gridtable.Migrations
@@ -41,6 +42,20 @@ namespace ko_gridtable.Migrations
 
                 context.Users.AddOrUpdate(model);
             }
+
+            var sexoM = new ComboSexo
+            {
+                Id = 0,
+                Description = "Masculino"
+            };
+            var sexoF = new ComboSexo
+            {
+                Id = 0,
+                Description = "Femenino"
+            };
+
+            context.Sexo.AddOrUpdate(sexoM);
+            context.Sexo.AddOrUpdate(sexoF);
         }
     }
 }
