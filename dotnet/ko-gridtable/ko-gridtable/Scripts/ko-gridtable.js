@@ -6,12 +6,12 @@
  * Web Page: http://www.tulio-wiki.com.ar
  * GitHub: https://github.com/TulioHector/ko-gridtable
  * Licence: GPL 3.0
- * Version: 0.0.11
+ * Version: 0.0.12
  */
 ;
 'use strict';
 
-var koGridTable = function (options) {
+var KoGridTable = function (options) {
     $this = this;
     var opt = options || {};
     $this.url = opt.Url || "";
@@ -20,7 +20,7 @@ var koGridTable = function (options) {
     $this.editUrl = opt.UrlEdit || "";
     $this.addUrl = opt.UrlAddItem || "";
     $this.deleteUrl = opt.UrlDeleteItem || "";
-    $this.columns = opt.Columns || [];
+    $this.columns = opt.columns || [];
     $this.enableEditInline = opt.EnableEditInline || false;
     $this.idGrid = opt.Id || null;
     $this.pagings = opt.Pagings || null;
@@ -29,8 +29,7 @@ var koGridTable = function (options) {
     $this.RowItem = {};
     $this.CmbModel = {};
 
-    $this.Columns = [];
-    //$this.cmbRol = ko.observableArray([]);
+    $this.columns = [];
     $this.combosSources = [];
     $this.selectedChoice = ko.observable();
     $this.selectedChoicePaging = ko.observable();
@@ -78,40 +77,12 @@ var koGridTable = function (options) {
             }
         });
     };
-    $this.ModalDialog = function (text, title) {
-        var model;
-        if (document.getElementById($this.modalDialegId)) {
-            model = document.getElementById($this.modalDialegId);
-        } else {
-            model = document.createElement("div");
-        }
-
-        model.setAttribute('id', $this.modalDialegId);
-        model.setAttribute('class', "modal fade");
-        var html = "<div class=\"modal-dialog\">";
-        html += "<div class=\"modal-content\">";
-        html += "<div class=\"modal-header\">";
-        html += "<button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>";
-        html += "<h4 class=\"modal-title\">" + title + "</h4>";
-        html += "</div>";
-        html += "<div class=\"modal-body\">";
-        html += "<p>" + text + "</p>";
-        html += "</div>";
-        html += "<div class=\"modal-footer\">";
-        html += "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>";
-        html += "<button type=\"button\" data-bind=\"click: $root.RemoveItem\" class=\"btn btn-primary\">Save changes</button>";
-        html += "</div>";
-        html += "</div><!-- /.modal-content -->";
-        html += "</div><!-- /.modal-dialog -->";
-        model.innerHTML = html;
-        document.body.appendChild(model);
-    };
-
+    /*
     $this.selectedChoicePaging.subscribe(function (newValue) {
         $this.pageSize(newValue);
         $this.load();
     });
-
+    */
     $this.DisplayAlert = function (msg, type) {
         var alert = document.getElementById("alertKoGridTable");
 
@@ -146,7 +117,7 @@ var koGridTable = function (options) {
         var isAddRow = (typeof (rowdata.Id) === "function");
         var idSelected = $this.selectedChoice();
         var obj = new callMethod();
-
+        
         $.each($this.columns, function (key, value) {
             if (value.Type === 'select') {
                 var val = row[value.Name];
@@ -203,13 +174,19 @@ var koGridTable = function (options) {
         $this.selectedItem(null);
     };
     $this.templateToUse = function (item) {
-        var tmpl = $this.selectedItem() === item ? 'editTmpl' : 'itemsTmpl';
+        var tmpl = $this.selectedItem() === item ? $this.idGrid+'_EditTmpl' : $this.idGrid+'_ItemsTmpl';
         return tmpl;
     };
+    $this.templateHeader = function () {
+        return $this.idGrid+"_HeaderTmpl";
+    }
+    $this.templateFoot = function () {
+        return $this.idGrid+"_PagingTmpl";
+    }
     $this.buildTemplate = function () {
         // row template
         var scriptRow = document.createElement("script");
-        scriptRow.setAttribute('id', 'itemsTmpl');
+        scriptRow.setAttribute('id', $this.idGrid + '_ItemsTmpl');
         scriptRow.setAttribute('type', 'text/html');
         var htmlRow = "<tr>";
         $.each($this.columns, function (key, value) {
@@ -221,8 +198,8 @@ var koGridTable = function (options) {
                 if (enableAbn && value.CustomColumn) {
                     var htd = "<td class=\"buttons\">";
                     if (value.EnableAbm) {
-                        var btnEdit = "<button data-bind=\"click: $root.edit\"><span class=\"fa fa-floppy-o\"></span></button>";
-                        var btnRemove = "<button data-bind=\"click: $root.remove\"><span class=\"fa fa-trash\"></span></button>";
+                        var btnEdit = "<button data-bind=\"click: $parent.edit\"><span class=\"fa fa-floppy-o\"></span></button>";
+                        var btnRemove = "<button data-bind=\"click: $parent.remove\"><span class=\"fa fa-trash\"></span></button>";
                         htd += $this.enableEditInline ? btnEdit + btnRemove : btnRemove;
                     }
                     htd += existContent ? value.Content : "";
@@ -232,10 +209,10 @@ var koGridTable = function (options) {
             } else {
                 switch (value.Type) {
                     case "checkbox":
-                        htmlRow += "<td data-bind=\"visible: \$root.IsVisible(" + !colHidden + ")\"><input class=\"checkbox input-sm\" data-bind=\"setCheckboxValue: { text: " + value.Name + " }\" type=\"" + value.Type + "\" disabled /></td>";
+                        htmlRow += "<td data-bind=\"visible: $parent.IsVisible(" + !colHidden + ")\"><input class=\"checkbox input-sm\" data-bind=\"setCheckboxValue: { text: " + value.Name + " }\" type=\"" + value.Type + "\" disabled /></td>";
                         break;
                     default:
-                        htmlRow += "<td data-bind=\"text: " + value.Name + ", visible: \$root.IsVisible(" + !colHidden + ")\"></td>";
+                        htmlRow += "<td data-bind=\"text: " + value.Name + ", visible: $parent.IsVisible(" + !colHidden + ")\"></td>";
                         break;
                 }
             }
@@ -248,24 +225,24 @@ var koGridTable = function (options) {
         // edit row template
         if ($this.enableEditInline) {
             var scriptEdit = document.createElement("script");
-            scriptEdit.setAttribute('id', 'editTmpl');
+            scriptEdit.setAttribute('id', $this.idGrid + '_EditTmpl');
             scriptEdit.setAttribute('type', 'text/html');
             var htmlEdit = "<tr>";
             $.each($this.columns, function (key, value) {
                 var colHidden = typeof value.Hidden === 'undefined' ? false : true;
                 var isCustomCol = typeof value.CustomColumn === 'undefined' ? false : true;
                 if (isCustomCol) {
-                    htmlEdit += '<td class="buttons"><button data-bind="click: $root.save"><span class="fa fa-floppy-o"></span></button><button data-bind="click: $root.cancel"><span class="fa fa-times"></span></button></td>';
+                    htmlEdit += '<td class="buttons"><button data-bind="click: $parent.save"><span class="fa fa-floppy-o"></span></button><button data-bind="click: $parent.cancel"><span class="fa fa-times"></span></button></td>';
                 } else {
                     if (!colHidden) {
                         htmlEdit += '<td>';
                         switch (value.Type) {
                             case "select":
-                                var databind = 'options: $root.getCombosSources(\'' + value.Name + '\'), optionsText: \'' + value.DataText + '\', optionsValue: \'' + value.DataValue + '\', value: $root.selectedChoice , optionsCaption: \'' + value.OptionsCaption + '\' ';
+                                var databind = 'options: $parent.getCombosSources(\'' + value.Name + '\'), optionsText: \'' + value.DataText + '\', optionsValue: \'' + value.DataValue + '\', value: $parent.selectedChoice , optionsCaption: \'' + value.OptionsCaption + '\' ';
                                 htmlEdit += "<select class=\"cmb_" + value.Name + " form-control input-sm\" data-bind=\"" + databind + "\"></select></td>";
                                 break;
                             case "checkbox":
-                                htmlEdit += "<input class=\"checkbox input-sm\" data-bind=\"checked: " + value.Name + ", setCheckboxValue: { text: " + value.Name + " },uniqueName: true\" type=\"" + value.Type + "\"/></td>";
+                                htmlEdit += "<input class=\"checkbox input-sm\" data-bind=\"checked: " + value.Name + ", $parent.setCheckboxValue: { text: " + value.Name + " },uniqueName: true\" type=\"" + value.Type + "\"/></td>";
                             default:
                                 htmlEdit += "<input class=\"form-control input-sm\" data-bind=\"value: " + value.Name + ", uniqueName: true\" type=\"" + value.Type + "\"/></td>";
                                 break;
@@ -279,7 +256,7 @@ var koGridTable = function (options) {
         }
         // header template
         var scriptHeader = document.createElement("script");
-        scriptHeader.setAttribute('id', 'HeaderTmpl');
+        scriptHeader.setAttribute('id', $this.idGrid + "_HeaderTmpl");
         scriptHeader.setAttribute('type', 'text/html');
         var htmlHeader = "<tr data-bind=\"click: sortTable\">";
         $.each($this.columns, function (key, value) {
@@ -290,7 +267,7 @@ var koGridTable = function (options) {
                 var c = "<th>" + value.Name + "</th>";
                 htmlHeader += value.CustomColumn ? c : "";
             } else {
-                htmlHeader += "<th data-column=\"" + value.Name + "\" data-bind=\"" + " visible: \$root.IsVisible(" + !colHidden + ")\">" + value.Name + "";
+                htmlHeader += "<th data-column=\"" + value.Name + "\" data-bind=\"" + " visible: IsVisible(" + !colHidden + ")\">" + value.Name + "";
                 htmlHeader += "<span >";
                 htmlHeader += "<i data-bind=\"attr: { class: iconType } \"></i>";
                 htmlHeader += "</span></th>";
@@ -303,7 +280,7 @@ var koGridTable = function (options) {
         //paging template
         if ($this.pagings !== null) {
             var scriptPaging = document.createElement("script");
-            scriptPaging.setAttribute('id', 'PagingTmpl');
+            scriptPaging.setAttribute('id', $this.idGrid + "_PagingTmpl");
             scriptPaging.setAttribute('type', 'text/html');
             var htmlPaging = "<tr>";
             htmlPaging += "<td>" + $this.pagings.SelectorName;
@@ -332,7 +309,7 @@ var koGridTable = function (options) {
         var clearDiv = document.createElement("div");
         clearDiv.setAttribute('class', 'clearfix');
         var scriptAlert = document.createElement("div");
-        scriptAlert.setAttribute('id', 'alertKoGridTable');
+        scriptAlert.setAttribute('id', $this.idGrid + '_alertKoGridTable');
         scriptAlert.setAttribute('class', 'alert');
         scriptAlert.setAttribute('role', 'alert');
         scriptAlert.style.display = "none";
@@ -347,7 +324,7 @@ var koGridTable = function (options) {
 
     $this.IsHiddenColumn = function () {
         $.each($this.hiddenColumn, function (key, value) {
-            $.each($this.Columns, function (keyc, valuec) {
+            $.each($this.columns, function (keyc, valuec) {
                 var target = $(valuec);
                 var columnName = target.attr("data-column");
                 if (value === columnName) {
@@ -362,6 +339,7 @@ var koGridTable = function (options) {
         return $this.contacts();
     });
     $this.nextPage = function () {
+        
         var totalCount = parseInt($this.totalRows());
         if ((($this.currentPageIndex() + 1) * $this.pageSize()) < totalCount) {
             $this.currentPageIndex($this.currentPageIndex() + 1);
@@ -437,6 +415,7 @@ var koGridTable = function (options) {
     };
 
     $this.load = function () {
+        
         var order = $this.currentColumn();
         var data = {
             Orderby: order !== "" ? escape($this.currentColumn() + ' ' + $this.sortType) : null,
@@ -453,7 +432,7 @@ var koGridTable = function (options) {
         }).done(function (result) {
             var data = result;
             var dataRows = data.Rows;
-            $this.contacts([]);
+            
             $this.totalRows(data.TotalRows);
             $this.contacts(dataRows);
 
@@ -461,32 +440,39 @@ var koGridTable = function (options) {
             $this.totalPages(calcTotalPage);
         });
     };
-
-    $this._stringToBoolean = function (string) {
-        var isBoolean = typeof string == 'boolean';
-        if (isBoolean) {
-            return string;
-        }
-        if (typeof string === 'function') {
-            return false;
-        }
-        switch (string.toLowerCase()) {
-            case "true": case "yes": case "1": return true;
-            case "false": case "no": case "0": case null: return false;
-            default: return Boolean(string);
-        }
-    }
-
+    
     $this.buidItemModel();
     $this.buildTemplate();
+    $this.load();
 };
-
+function stringToBoolean(string) {
+    var isBoolean = typeof string == 'boolean';
+    if (isBoolean) {
+        return string;
+    }
+    if (typeof string === 'function') {
+        return false;
+    }
+    switch (string.toLowerCase()) {
+        case "true":
+        case "yes":
+        case "1":
+            return true;
+        case "false":
+        case "no":
+        case "0":
+        case null:
+            return false;
+        default:
+            return Boolean(string);
+    }
+}
 ko.bindingHandlers.setCheckboxValue = {
     update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var el = $(element);
         var value = ko.utils.unwrapObservable(valueAccessor());
         
-        if (bindingContext.$root._stringToBoolean(value.text)) {
+        if (stringToBoolean(value.text)) {
             el.prop('checked', true);
         } else {
             el.prop('checked', false);
@@ -520,5 +506,28 @@ function callMethod() {
         me.result = _ajax;
     };
 }
-
+// register web componet
+/*
+ko.components.register('ko-gridtable', {
+    viewModel: {
+        createViewModel: function (params, componentInfo) {
+            var g = new KoGridTable(params);
+            return g;
+        }
+    },
+    template: '<table class="table table-hover table-condensed" id="gridSample" >' +
+                '<thead data-bind="template: {name: templateHeader} ">' +
+                '</thead>' +
+                '<tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>' +
+                '<tfoot data-bind="template: {name: templateFoot} ">' +
+                '</tfoot>' +
+            '</table>' +
+            '<div class="pull-left">' +
+                '<button data-bind="click: add" type="button" class="btn btn-default addrow">' +
+                    '<span class="fa fa-plus-square"></span>' +
+                '</button>' +
+            '</div>'
+});
+ko.applyBindings();
+*/
 ;

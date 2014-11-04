@@ -37,19 +37,39 @@
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="grid1">
                 <!-- Default panel contents -->
                 <div class="panel-heading" id="simple">Ejemplo Simple</div>
                 <div class="panel-body">
                     <p>A continuacion se muestra un ejemplo de uso simple, endodnde solamente se pagina</p>
                 </div>
-
+                
+                    <ko-gridtable params="
+                              Id:'prueba',
+                              Url: '/api/Data' ,
+                              UrlEdit: 'api/Data' ,
+                              UrlAddItem: 'api/Data' ,
+                              UrlDeleteItem:'api/Data' ,
+                              Columns: [
+                              { Name: 'Name' , Type: 'text' },
+                              { Name: 'LastName' , Type: 'text' },
+                              { Name: 'Email' , Type: 'text' },
+                              { Name: 'Id' , Type: 'number' , Hidden: true },
+                              { Name: 'Activo' , Type: 'checkbox' },
+                              { Name: 'Sexo' , Type: 'select' , DataSourceUrl: '/api/ComboBox' , DataText: 'Description' , DataValue: 'Id' , OptionsCaption: 'Elegir' },
+                              { Name: 'Actions' , Type: 'html' , CustomColumn: true, EnableAbm: true }
+                              ],
+                              EnableEditInline: true,
+                              Pagings { SelectorRang: ' 10-5' , SelectorName: ' number of items per page:' , Enable: true, NamePages: ' page ' , NameTotalCount: ' total ' , NameTotalPages: ' de ' }" id="prueba">
+                    </ko-gridtable>
+                    
                 <!-- Table -->
-                <table class="table table-hover table-condensed" id="gridSample">
-                    <thead data-bind="template: {name: 'HeaderTmpl'} ">
+                <!--
+                <table class="table table-hover table-condensed" id="gridSample" >
+                    <thead data-bind="template: {name: templateHeader} ">
                     </thead>
                     <tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>
-                    <tfoot data-bind="template: {name: 'PagingTmpl'} ">
+                    <tfoot data-bind="template: {name: templateFoot} ">
 
                     </tfoot>
                 </table>
@@ -58,31 +78,49 @@
                         <span class="fa fa-plus-square"></span>
                     </button>
                 </div>
+                -->
             </div>
-            <!--
-            <div class="panel panel-default">
+            
+            <div class="panel panel-default" id="grid2">
                 
                 <div class="panel-heading" id="customCal">Ejemplo Custom Column</div>
                 <div class="panel-body">
                     <p>A continuacion se muestra un ejemplo de uso de custom column, en dodnde veremos como agregar una column con contenido que nosotros queramos.</p>
                 </div>
-
                 
-                <table class="table table-hover table-condensed" id="gridSample">
-                    <thead data-bind="template: {name: 'HeaderTmpl'} ">
-                    </thead>
-                    <tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>
-                    <tfoot data-bind="template: {name: 'PagingTmpl'} ">
+                <ko-gridtable params="
+                              Id:'prueba2',
+                              Url: '/api/Sexo' ,
+                              UrlEdit: 'api/Data' ,
+                              UrlAddItem: 'api/Data' ,
+                              UrlDeleteItem:'api/Data' ,
+                              Columns: [
+                              { Name: 'Description' , Type: 'text' },
+                              { Name: 'Id' , Type: 'number' , Hidden: true },
 
-                    </tfoot>
-                </table>
-                <div class="pull-left">
-                    <button data-bind="click: add" type="button" class="btn btn-default addrow">
-                        <span class="fa fa-plus-square"></span>
-                    </button>
-                </div>
+                              { Name: 'Actions' , Type: 'html' , CustomColumn: true, EnableAbm: true }
+                              ],
+                              EnableEditInline: true,
+                              Pagings { SelectorRang: ' 10-5' , SelectorName: ' number of items per page:' , Enable: true, NamePages: ' page ' , NameTotalCount: ' total ' , NameTotalPages: ' de ' }" id="prueba2">
+                </ko-gridtable>
+                
+                <!--
+                    <table class="table table-hover table-condensed" id="gridSample2">
+                        <thead data-bind="template: {name: $root.templateHeader} ">
+                        </thead>
+                        <tbody data-bind="template: { name: $root.templateToUse, foreach: $root.currentPage}"></tbody>
+                        <tfoot data-bind="template: {name: $root.templateFoot} ">
+
+                        </tfoot>
+                    </table>
+                    <div class="pull-left">
+                        <button data-bind="click: add" type="button" class="btn btn-default addrow">
+                            <span class="fa fa-plus-square"></span>
+                        </button>
+                    </div>
+                    -->
             </div>
-
+            <!--
             <div class="panel panel-default">
                 
                 <div class="panel-heading" id="combobox">Ejemplo Combobox</div>

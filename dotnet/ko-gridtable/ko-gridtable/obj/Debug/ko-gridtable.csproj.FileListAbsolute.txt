@@ -35,3 +35,6 @@ C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.Sq
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.xml
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\EntityFramework.SqlServer.xml
 C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\WebActivatorEx.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\v8\Noesis.Javascript.x64.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\v8\Noesis.Javascript.x86.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\ko-gridtable\bin\TypeScriptBundleTransform.dll

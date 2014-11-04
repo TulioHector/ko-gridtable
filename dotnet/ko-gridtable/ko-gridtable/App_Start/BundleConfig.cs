@@ -24,6 +24,11 @@ namespace ko_gridtable
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
+            bundles.Add(new ScriptBundle("~/Scripts/koGridTable").Include(
+                "~/Scripts/koGridTable/BaseViewModel.js",
+                "~/Scripts/koGridTable/KoGridTable.js"
+                ));
+
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = true;

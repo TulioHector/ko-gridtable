@@ -17,7 +17,7 @@ namespace ko_gridtable.Controllers
         private readonly KoGridTableContext _db = new KoGridTableContext();
 
         [HttpGet]
-        public async Task<ResultGrid> GetData(string @orderby, int pageIndex, int pageSize, int skip, int top)
+        public async Task<ResultGrid<GrudUsers>> GetData(string @orderby, int pageIndex, int pageSize, int skip, int top)
         {
             var list = (from u in _db.Users
                         join c in _db.Sexo on u.Sexo.Id equals c.Id into cs
@@ -42,14 +42,14 @@ namespace ko_gridtable.Controllers
                 list = list.OrderByField(order[0], descending);
             }
 
-            var result = new ResultGrid
+            var result = new ResultGrid<GrudUsers>
             {
                 TotalRows = rowCount,
                 Rows = await list.Paging(pageSize, pageIndex).ToListAsync()
             };
             return result;
         }
-
+        
         [HttpPost]
         public HttpResponseMessage Post(UserModel row)
         {
@@ -78,10 +78,17 @@ namespace ko_gridtable.Controllers
                 var user = (from u in _db.Users
                     where u.Id == row.Id
                     select u).First();
-                var sexo = (from s in _db.Sexo
-                    where s.Id == row.Sexo.Id
-                    select s).First();
-                user.Sexo = sexo;
+
+                if (row.Sexo != null)
+                {
+                    var sexo = (from s in _db.Sexo
+                                where s.Id == row.Sexo.Id
+                                select s).First();
+                    user.Sexo = sexo;
+                }
+                user.LastName = row.LastName;
+                user.Name = row.Name;
+                user.Activo = row.Activo;
                 _db.Users.AddOrUpdate(user);
                 _db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, new ResponseGrid { Message = "registro actualizado", Type = "success" });

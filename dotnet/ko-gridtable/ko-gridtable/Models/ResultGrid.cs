@@ -2,9 +2,9 @@
 
 namespace ko_gridtable.Models
 {
-    public class ResultGrid
+    public class ResultGrid<T>
     {
         public int TotalRows { get; set; }
-        public IList<GrudUsers> Rows { get; set; }
+        public IList<T> Rows { get; set; }
     }
 }
