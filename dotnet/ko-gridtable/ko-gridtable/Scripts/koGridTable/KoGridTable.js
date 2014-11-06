@@ -39,6 +39,7 @@ var KoGridTable = (function (_super) {
         this.idGrid = params.Id || null;
         this.pagings = params.Pagings || null;
         this.defaultPageSize = params.DefaultPageSize || 5;
+        this.callBackError = params.CallbackError || null;
 
         this.buidItemModel();
         this.buildTemplate();
@@ -51,9 +52,9 @@ var KoGridTable = (function (_super) {
         this.cancel = this.cancel.bind(this);
         this.save = this.save.bind(this);
         this.remove = this.remove.bind(this);
-        this.load = this.load.bind(this);
     }
     KoGridTable.prototype.save = function (row) {
+        var _this = this;
         var rowdata = this.selectedItem();
         var isAddRow = (typeof (rowdata.Id) === "function");
         var idSelected = this.selectedChoice();
@@ -89,12 +90,12 @@ var KoGridTable = (function (_super) {
             obj.result.done(function (data) {
                 if (data.Type === "error") {
                     //commit(false);
-                    if (typeof this.callBackError === 'function') {
-                        this.callBackError(data.Message, "danger");
+                    if (typeof _this.callBackError === 'function') {
+                        _this.callBackError(data.Message, "danger");
                     }
                 } else {
                     //commit(true);
-                    this.load();
+                    _this.load();
                 }
             });
         } else {
@@ -106,13 +107,12 @@ var KoGridTable = (function (_super) {
             obj.result.done(function (data) {
                 if (data.Type === "error") {
                     //commit(false);
-                    console.log(typeof this.callBackError);
-                    if (typeof this.callBackError === 'function') {
-                        this.callBackError(data.Message, "danger");
+                    if (typeof _this.callBackError === 'function') {
+                        _this.callBackError(data.Message, "danger");
                     }
                 } else {
                     //commit(true);
-                    this.load();
+                    _this.load();
                 }
             });
         }

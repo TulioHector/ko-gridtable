@@ -30,7 +30,8 @@ namespace ko_gridtable.Controllers
                     Activo = u.Activo,
                     LastName = u.LastName,
                     Name = u.Name,
-                    Sexo = ss.Description
+                    Sexo = ss.Description,
+                    IdSexo = ss.Id
                 }).AsQueryable();
 
             var rowCount = list.Count();
@@ -41,11 +42,11 @@ namespace ko_gridtable.Controllers
                 var descending = order[1] == "desc";
                 list = list.OrderByField(order[0], descending);
             }
-
+            var a = await list.Paging(pageSize, pageIndex).ToListAsync();
             var result = new ResultGrid<GrudUsers>
             {
                 TotalRows = rowCount,
-                Rows = await list.Paging(pageSize, pageIndex).ToListAsync()
+                Rows = a
             };
             return result;
         }
@@ -79,7 +80,7 @@ namespace ko_gridtable.Controllers
                     where u.Id == row.Id
                     select u).First();
 
-                if (row.Sexo != null)
+                if (row.Sexo != null && row.Sexo.Id > 0)
                 {
                     var sexo = (from s in _db.Sexo
                                 where s.Id == row.Sexo.Id

@@ -1,8 +1,12 @@
 ﻿;
-
+function cathErrorGrid(msj, type) {
+    console.log(msj);
+    console.log(type);
+}
 $(function () {
     
-    /*
+
+/*
     var vm = new KoGridTable({
         Id: "grid1",
         Url: "/api/Data",

@@ -44,8 +44,8 @@
                     <p>A continuacion se muestra un ejemplo de uso simple, endodnde solamente se pagina</p>
                 </div>
                 
-                    <ko-gridtable params="
-                              Id:'prueba',
+                <ko-gridtable params="
+                              Id:'grid1',
                               Url: '/api/Data' ,
                               UrlEdit: 'api/Data' ,
                               UrlAddItem: 'api/Data' ,
@@ -55,13 +55,15 @@
                               { Name: 'LastName' , Type: 'text' },
                               { Name: 'Email' , Type: 'text' },
                               { Name: 'Id' , Type: 'number' , Hidden: true },
+                              { Name: 'IdSexo' , Type: 'number' , Hidden: true },
                               { Name: 'Activo' , Type: 'checkbox' },
                               { Name: 'Sexo' , Type: 'select' , DataSourceUrl: '/api/ComboBox' , DataText: 'Description' , DataValue: 'Id' , OptionsCaption: 'Elegir' },
                               { Name: 'Actions' , Type: 'html' , CustomColumn: true, EnableAbm: true }
                               ],
                               EnableEditInline: true,
+                              CallbackError: function (msj, type) { cathErrorGrid(msj, type); },
                               Pagings { SelectorRang: ' 10-5' , SelectorName: ' number of items per page:' , Enable: true, NamePages: ' page ' , NameTotalCount: ' total ' , NameTotalPages: ' de ' }" id="prueba">
-                    </ko-gridtable>
+                </ko-gridtable>
                     
                 <!-- Table -->
                 <!--
@@ -89,11 +91,11 @@
                 </div>
                 
                 <ko-gridtable params="
-                              Id:'prueba2',
+                              Id:'grid2',
                               Url: '/api/Sexo' ,
-                              UrlEdit: 'api/Data' ,
-                              UrlAddItem: 'api/Data' ,
-                              UrlDeleteItem:'api/Data' ,
+                              UrlEdit: 'api/Data2' ,
+                              UrlAddItem: 'api/Data2' ,
+                              UrlDeleteItem:'api/Data2' ,
                               Columns: [
                               { Name: 'Description' , Type: 'text' },
                               { Name: 'Id' , Type: 'number' , Hidden: true },
@@ -101,6 +103,7 @@
                               { Name: 'Actions' , Type: 'html' , CustomColumn: true, EnableAbm: true }
                               ],
                               EnableEditInline: true,
+                              CallbackError: function (msj, type) { cathErrorGrid(msj, type); },
                               Pagings { SelectorRang: ' 10-5' , SelectorName: ' number of items per page:' , Enable: true, NamePages: ' page ' , NameTotalCount: ' total ' , NameTotalPages: ' de ' }" id="prueba2">
                 </ko-gridtable>
                 

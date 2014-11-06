@@ -18,7 +18,8 @@ class KoGridTable extends BaseViewModel {
         this.idGrid = params.Id || null;
         this.pagings = params.Pagings || null;
         this.defaultPageSize = params.DefaultPageSize || 5;
-        
+        this.callBackError = params.CallbackError || null;
+
         this.buidItemModel();
         this.buildTemplate();
         this.load();
@@ -30,7 +31,6 @@ class KoGridTable extends BaseViewModel {
         this.cancel = <any>this.cancel.bind(this);
         this.save = <any>this.save.bind(this);
         this.remove = <any>this.remove.bind(this);
-        this.load = <any>this.load.bind(this);
     }
 
     public callBackError: any;
@@ -85,7 +85,7 @@ class KoGridTable extends BaseViewModel {
                 Type: 'POST',
                 Param: JSON.stringify(dataObj)
             });
-            obj.result.done(function (data) {
+            obj.result.done(data => {
                 if (data.Type === "error") {
                     //commit(false);
                     if (typeof this.callBackError === 'function') {
@@ -102,10 +102,9 @@ class KoGridTable extends BaseViewModel {
                 Type: 'PUT',
                 Param: JSON.stringify(row)
             });
-            obj.result.done(function (data) {
+            obj.result.done(data => {
                 if (data.Type === "error") {
                     //commit(false);
-                    console.log(typeof this.callBackError);
                     if (typeof this.callBackError === 'function') {
                         this.callBackError(data.Message, "danger");
                     }
@@ -119,7 +118,7 @@ class KoGridTable extends BaseViewModel {
         this.selectedItem(null);
     }
 
-    public buildTemplate() {
+    private buildTemplate() {
         // row template
         var scriptRow = document.createElement("script");
         scriptRow.setAttribute('id', this.idGrid + '_ItemsTmpl');
@@ -315,20 +314,19 @@ class KoGridTable extends BaseViewModel {
     }
 
     private buidItemModel() {
-        var _this = this;
-        $.each(this.columns, function (key, value) {
+        $.each(this.columns, (key, value) => {
             //var name = value.Name;
             var type = value.Type;
             switch (type) {
-                case "select":
-                    _this.cmbModel[value.DataText] = ko.observable(value.DataText);
-                    _this.cmbModel[value.DataValue] = ko.observable(value.DataValue);
-                    _this.getDataSourece(value.DataSourceUrl, "get", value);
-                    _this.rowItem[value.Name] = ko.observable(value.Name);
-                    break;
-                default:
-                    _this.rowItem[value.Name] = ko.observable(value.Name);
-                    break;
+            case "select":
+                this.cmbModel[value.DataText] = ko.observable(value.DataText);
+                this.cmbModel[value.DataValue] = ko.observable(value.DataValue);
+                this.getDataSourece(value.DataSourceUrl, "get", value);
+                this.rowItem[value.Name] = ko.observable(value.Name);
+                break;
+            default:
+                this.rowItem[value.Name] = ko.observable(value.Name);
+                break;
             }
         });
     }

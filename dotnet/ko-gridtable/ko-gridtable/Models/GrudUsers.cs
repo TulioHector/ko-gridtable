@@ -12,6 +12,8 @@
 
         public string Sexo { get; set; }
 
+        public int? IdSexo { get; set; }
+
         public bool Activo { get; set; }
     }
 }
