@@ -6,7 +6,7 @@
 * Web Page: http://www.tulio-wiki.com.ar
 * GitHub: https://github.com/TulioHector/ko-gridtable
 * Licence: GPL 3.0
-* Version: 0.0.12
+* Version: 0.0.13
 */
 'use strict';
 var BaseViewModel = (function () {
@@ -15,6 +15,7 @@ var BaseViewModel = (function () {
         this.rowItem = {};
         this.collectionItems = ko.observableArray([]);
         this.selectedChoice = ko.observable("");
+        this.classTable = ko.observable("");
         this.idGrid = params.Id;
     }
     BaseViewModel.prototype.templateToUse = function (item) {
@@ -110,6 +111,7 @@ var KoGridTable = (function (_super) {
         this.pagings = params.Pagings || null;
         this.defaultPageSize = params.DefaultPageSize || 5;
         this.callBackError = params.CallbackError || null;
+        this.classTable = params.ClassTable || "table table-hover table-condensed";
 
         this.buidItemModel();
         this.buildTemplate();
@@ -446,7 +448,7 @@ ko.components.register('ko-gridtable', {
             return g;
         }
     },
-    template: '<table class="table table-hover table-condensed" id="gridSample" >' + '<thead data-bind="template: {name: templateHeader} ">' + '</thead>' + '<tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>' + '<tfoot data-bind="template: {name: templateFoot} ">' + '</tfoot>' + '</table>' + '<div class="pull-left">' + '<button data-bind="click: add" type="button" class="btn btn-default addrow">' + '<span class="fa fa-plus-square"></span>' + '</button>' + '</div>'
+    template: '<table data-bind="css: classTable" >' + '<thead data-bind="template: {name: templateHeader} ">' + '</thead>' + '<tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>' + '<tfoot data-bind="template: {name: templateFoot} ">' + '</tfoot>' + '</table>' + '<div class="pull-left">' + '<button data-bind="click: add" type="button" class="btn btn-default addrow">' + '<span class="fa fa-plus-square"></span>' + '</button>' + '</div>'
 });
 ko.applyBindings();
 function stringToBoolean(string) {

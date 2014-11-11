@@ -19,6 +19,7 @@ class KoGridTable extends BaseViewModel {
         this.pagings = params.Pagings || null;
         this.defaultPageSize = params.DefaultPageSize || 5;
         this.callBackError = params.CallbackError || null;
+        this.classTable = params.ClassTable || "table table-hover table-condensed";
 
         this.buidItemModel();
         this.buildTemplate();
@@ -51,7 +52,7 @@ class KoGridTable extends BaseViewModel {
     public currentPage = ko.computed(() => {
         return this.collectionItems();
     });
-   
+    
     public save(row) {
         var rowdata: any = this.selectedItem();
         var isAddRow = (typeof (rowdata.Id) === "function");
@@ -369,7 +370,7 @@ ko.components.register('ko-gridtable', {
             return g;
         }
     },
-    template: '<table class="table table-hover table-condensed" id="gridSample" >' +
+    template: '<table data-bind="css: classTable" >' +
         '<thead data-bind="template: {name: templateHeader} ">' +
         '</thead>' +
         '<tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>' +

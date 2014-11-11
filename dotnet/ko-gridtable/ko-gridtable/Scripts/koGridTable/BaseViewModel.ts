@@ -6,7 +6,7 @@
  * Web Page: http://www.tulio-wiki.com.ar
  * GitHub: https://github.com/TulioHector/ko-gridtable
  * Licence: GPL 3.0
- * Version: 0.0.12
+ * Version: 0.0.13
  */
 'use strict';
 class BaseViewModel {
@@ -20,6 +20,7 @@ class BaseViewModel {
     public collectionItems: KnockoutObservableArray<any> = ko.observableArray([]);
     public selectedChoice: KnockoutObservable<string> = ko.observable("");
     public columns: IColumns[];
+    public classTable: KnockoutObservable<string> = ko.observable("");
 
     constructor(params: IKoGridParams) {
         this.idGrid = params.Id;

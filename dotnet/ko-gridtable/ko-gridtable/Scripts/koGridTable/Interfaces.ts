@@ -9,6 +9,7 @@
     EnableEditInline: boolean;
     DefaultPageSize: number;
     CallbackError: any;
+    ClassTable: string;
 }
 
 interface IColumns {

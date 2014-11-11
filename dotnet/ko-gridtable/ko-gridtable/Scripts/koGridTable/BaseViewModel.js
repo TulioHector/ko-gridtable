@@ -31,7 +31,6 @@ var BaseViewModel = (function () {
     };
 
     BaseViewModel.prototype.edit = function (item) {
-        console.log(item);
         this.selectedItem(item);
     };
 
