@@ -20,7 +20,7 @@ Para empezar solo hay que agregar la libreria de ko-gridtable despues de las sig
 - JQuery
 - FontAwesome
 - Knockout
-- 
+
 Como se muestra a continuacion.
 ```html
 <link rel="stylesheet" href="/Content/font-awesome.min.css">
@@ -79,4 +79,9 @@ Para utilizar web component el archivo js sampleGrid.js no es necesario, ya que 
                               CallbackError: function (msj, type) { cathErrorGrid(msj, type); },
                               Pagings { SelectorRang: ' 10-5' , SelectorName: ' number of items per page:' , Enable: true, NamePages: ' page ' , NameTotalCount: ' total ' , NameTotalPages: ' de ' }" id="prueba2">
                 </ko-gridtable>
+```
+## Nuget
+Esta libreria se encuentra tambien Nuget https://www.nuget.org/packages/Ko-GridTable/.
+``` 
+PM> Install-Package Ko-GridTable 
 ```
