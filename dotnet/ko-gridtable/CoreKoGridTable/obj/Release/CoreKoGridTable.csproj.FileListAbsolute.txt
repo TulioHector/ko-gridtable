@@ -1,0 +1,4 @@
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\bin\Release\CoreKoGridTable.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\bin\Release\CoreKoGridTable.pdb
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\obj\Release\CoreKoGridTable.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\obj\Release\CoreKoGridTable.pdb

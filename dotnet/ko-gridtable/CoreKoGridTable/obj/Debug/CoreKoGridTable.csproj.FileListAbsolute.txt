@@ -1,0 +1,5 @@
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\bin\Debug\CoreKoGridTable.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\bin\Debug\CoreKoGridTable.pdb
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\obj\Debug\CoreKoGridTable.csprojResolveAssemblyReference.cache
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\obj\Debug\CoreKoGridTable.dll
+C:\wamp\www\ko-gridtable\dotnet\ko-gridtable\CoreKoGridTable\obj\Debug\CoreKoGridTable.pdb
