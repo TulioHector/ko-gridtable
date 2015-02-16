@@ -23,7 +23,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.1</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -186,8 +186,6 @@
     <Compile Include="Models\GridPaging.cs" />
     <Compile Include="Models\GridSexo.cs" />
     <Compile Include="Models\GrudUsers.cs" />
-    <Compile Include="Models\ResponseGrid.cs" />
-    <Compile Include="Models\ResultGrid.cs" />
     <Compile Include="Context\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -283,6 +281,12 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreKoGridTable\CoreKoGridTable.csproj">
+      <Project>{7ECA5E6C-000A-47B8-9DB8-4177A12E7C2C}</Project>
+      <Name>CoreKoGridTable</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

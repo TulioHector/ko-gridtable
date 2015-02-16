@@ -3,6 +3,16 @@
 /// <reference path="../typings/knockout.viewmodel/knockout.viewmodel.d.ts" />
 /// <reference path="Interfaces.ts"/>
 /// <reference path="BaseViewModel.ts"/>
+/*
+Fraework Knockout 3.2.0 and Jquery 2.1.1 for build grid table with bootstrap 3.2.0 and fontawesome 4.2
+Autor: Hector Romano
+Date: 27/09/2014
+Twitter: @RomanoTulioHec
+Web Page: http://hromano.net
+GitHub: https://github.com/TulioHector/ko-gridtable
+Licence: GPL 3.0
+Version: 0.0.14
+*/
 'use strict';
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -54,11 +64,6 @@ var KoGridTable = (function (_super) {
         this.save = this.save.bind(this);
         this.remove = this.remove.bind(this);
     }
-    KoGridTable.prototype.getClassTable = function () {
-        console.log(this.classTable);
-        return this.classTable;
-    };
-
     KoGridTable.prototype.save = function (row) {
         var _this = this;
         var rowdata = this.selectedItem();
@@ -382,7 +387,7 @@ ko.components.register('ko-gridtable', {
             return g;
         }
     },
-    template: '<table data-bind="attr: {class : getClassTable }" >' + '<thead data-bind="template: {name: templateHeader} ">' + '</thead>' + '<tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>' + '<tfoot data-bind="template: {name: templateFoot} ">' + '</tfoot>' + '</table>' + '<div class="pull-left">' + '<button data-bind="click: add" type="button" class="btn btn-default addrow">' + '<span class="fa fa-plus-square"></span>' + '</button>' + '</div>'
+    template: '<table data-bind="css: classTable" >' + '<thead data-bind="template: {name: templateHeader} ">' + '</thead>' + '<tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>' + '<tfoot data-bind="template: {name: templateFoot} ">' + '</tfoot>' + '</table>' + '<div class="pull-left">' + '<button data-bind="click: add" type="button" class="btn btn-default addrow">' + '<span class="fa fa-plus-square"></span>' + '</button>' + '</div>'
 });
 ko.applyBindings();
 function stringToBoolean(string) {

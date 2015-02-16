@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ko-gridtable", "ko-gridtable\ko-gridtable.csproj", "{B0BCB8FF-00CC-4B6F-B019-F439912082B5}"
 EndProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0A16DD
 		packages\repositories.config = packages\repositories.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreKoGridTable", "CoreKoGridTable\CoreKoGridTable.csproj", "{7ECA5E6C-000A-47B8-9DB8-4177A12E7C2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{B0BCB8FF-00CC-4B6F-B019-F439912082B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0BCB8FF-00CC-4B6F-B019-F439912082B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0BCB8FF-00CC-4B6F-B019-F439912082B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ECA5E6C-000A-47B8-9DB8-4177A12E7C2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ECA5E6C-000A-47B8-9DB8-4177A12E7C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ECA5E6C-000A-47B8-9DB8-4177A12E7C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ECA5E6C-000A-47B8-9DB8-4177A12E7C2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

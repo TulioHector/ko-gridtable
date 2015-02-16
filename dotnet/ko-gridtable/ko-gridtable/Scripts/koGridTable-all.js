@@ -1,13 +1,13 @@
-﻿/*
-* Fraework Knockout 3.2.0 and Jquery 2.1.1 for build grid table with bootstrap 3.2.0 and fontawesome 4.2
-* Autor: Hector Romano
-* Date: 27/09/2014
-* Twitter: @RomanoTulioHec
-* Web Page: http://www.tulio-wiki.com.ar
-* GitHub: https://github.com/TulioHector/ko-gridtable
-* Licence: GPL 3.0
-* Version: 0.0.13
-*/
+/*
+ * Fraework Knockout 3.2.0 and Jquery 2.1.1 for build grid table with bootstrap 3.2.0 and fontawesome 4.2
+ * Autor: Hector Romano
+ * Date: 27/09/2014
+ * Twitter: @RomanoTulioHec
+ * Web Page: http://www.tulio-wiki.com.ar
+ * GitHub: https://github.com/TulioHector/ko-gridtable
+ * Licence: GPL 3.0
+ * Version: 0.0.13
+ */
 'use strict';
 var BaseViewModel = (function () {
     function BaseViewModel(params) {
@@ -15,40 +15,33 @@ var BaseViewModel = (function () {
         this.rowItem = {};
         this.collectionItems = ko.observableArray([]);
         this.selectedChoice = ko.observable("");
-        this.classTable = ko.observable("");
+        this.classTable = "";
         this.idGrid = params.Id;
     }
     BaseViewModel.prototype.templateToUse = function (item) {
         var tmpl = this.selectedItem() === item ? this.idGrid + '_EditTmpl' : this.idGrid + '_ItemsTmpl';
         return tmpl;
     };
-
     BaseViewModel.prototype.templateHeader = function () {
         return this.idGrid + "_HeaderTmpl";
     };
-
     BaseViewModel.prototype.templateFoot = function () {
         return this.idGrid + "_PagingTmpl";
     };
-
     BaseViewModel.prototype.edit = function (item) {
         this.selectedItem(item);
     };
-
     BaseViewModel.prototype.cancel = function () {
         this.selectedItem(null);
     };
-
     BaseViewModel.prototype.add = function () {
         var newItem = this.rowItem;
         this.collectionItems.push(newItem);
         this.selectedItem(newItem);
     };
-
     BaseViewModel.prototype.remove = function (itemToDelete) {
         this.removeItem(itemToDelete);
     };
-
     BaseViewModel.prototype.removeItem = function (itemToDelete) {
         var obj = new CallMethod();
         obj.call({
@@ -60,7 +53,8 @@ var BaseViewModel = (function () {
             if (data.Type === "error") {
                 //commit(false);
                 this.DisplayAlert(data.msj, "danger");
-            } else {
+            }
+            else {
                 //commit(true);
                 this.load();
             }
@@ -74,6 +68,16 @@ var BaseViewModel = (function () {
 /// <reference path="../typings/knockout.viewmodel/knockout.viewmodel.d.ts" />
 /// <reference path="Interfaces.ts"/>
 /// <reference path="BaseViewModel.ts"/>
+/*
+Fraework Knockout 3.2.0 and Jquery 2.1.1 for build grid table with bootstrap 3.2.0 and fontawesome 4.2
+Autor: Hector Romano
+Date: 27/09/2014
+Twitter: @RomanoTulioHec
+Web Page: http://hromano.net
+GitHub: https://github.com/TulioHector/ko-gridtable
+Licence: GPL 3.0
+Version: 0.0.14
+*/
 'use strict';
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -112,11 +116,9 @@ var KoGridTable = (function (_super) {
         this.defaultPageSize = params.DefaultPageSize || 5;
         this.callBackError = params.CallbackError || null;
         this.classTable = params.ClassTable || "table table-hover table-condensed";
-
         this.buidItemModel();
         this.buildTemplate();
         this.load();
-
         this.templateHeader = this.templateHeader.bind(this);
         this.templateToUse = this.templateToUse.bind(this);
         this.templateFoot = this.templateFoot.bind(this);
@@ -131,7 +133,6 @@ var KoGridTable = (function (_super) {
         var isAddRow = (typeof (rowdata.Id) === "function");
         var idSelected = this.selectedChoice();
         var obj = new CallMethod();
-
         $.each(this.columns, function (key, value) {
             if (value.Type === 'select') {
                 var val = row[value.Name];
@@ -140,20 +141,18 @@ var KoGridTable = (function (_super) {
                 cmbObj[value.DataText] = "";
                 if (typeof val === 'function') {
                     row[value.Name](cmbObj);
-                } else {
+                }
+                else {
                     row[value.Name] = cmbObj;
                 }
             }
         });
-
         if (isAddRow) {
             var props = Object.getOwnPropertyNames(row);
             var dataObj = {};
-
             for (var key in props) {
                 dataObj[props[key]] = row[props[key]]();
             }
-
             obj.call({
                 Url: this.addUrl,
                 Type: 'POST',
@@ -165,12 +164,14 @@ var KoGridTable = (function (_super) {
                     if (typeof _this.callBackError === 'function') {
                         _this.callBackError(data.Message, "danger");
                     }
-                } else {
-                    //commit(true);
+                }
+                else {
+                    //commit(true);                    
                     _this.load();
                 }
             });
-        } else {
+        }
+        else {
             obj.call({
                 Url: this.editUrl,
                 Type: 'PUT',
@@ -182,16 +183,15 @@ var KoGridTable = (function (_super) {
                     if (typeof _this.callBackError === 'function') {
                         _this.callBackError(data.Message, "danger");
                     }
-                } else {
+                }
+                else {
                     //commit(true);
                     _this.load();
                 }
             });
         }
-
         this.selectedItem(null);
     };
-
     KoGridTable.prototype.buildTemplate = function () {
         var _this = this;
         // row template
@@ -199,7 +199,6 @@ var KoGridTable = (function (_super) {
         scriptRow.setAttribute('id', this.idGrid + '_ItemsTmpl');
         scriptRow.setAttribute('type', 'text/html');
         var htmlRow = "<tr>";
-
         $.each(this.columns, function (key, value) {
             var colHidden = typeof value.Hidden === 'undefined' ? false : true;
             var isCustomCol = typeof value.CustomColumn === 'undefined' ? false : true;
@@ -217,7 +216,8 @@ var KoGridTable = (function (_super) {
                     htd += "</td>";
                     htmlRow += htd;
                 }
-            } else {
+            }
+            else {
                 switch (value.Type) {
                     case "checkbox":
                         htmlRow += "<td data-bind=\"visible: $parent.isVisible(" + !colHidden + ")\"><input class=\"checkbox input-sm\" data-bind=\"setCheckboxValue: { text: " + value.Name + " }\" type=\"" + value.Type + "\" disabled /></td>";
@@ -228,11 +228,9 @@ var KoGridTable = (function (_super) {
                 }
             }
         });
-
         htmlRow += "</tr>";
         scriptRow.innerHTML = htmlRow;
         document.head.appendChild(scriptRow);
-
         // edit row template
         if (this.enableEditInline) {
             var scriptEdit = document.createElement("script");
@@ -244,7 +242,8 @@ var KoGridTable = (function (_super) {
                 var isCustomCol = typeof value.CustomColumn === 'undefined' ? false : true;
                 if (isCustomCol) {
                     htmlEdit += '<td class="buttons"><button data-bind="click: $parent.save"><span class="fa fa-floppy-o"></span></button><button data-bind="click: $parent.cancel"><span class="fa fa-times"></span></button></td>';
-                } else {
+                }
+                else {
                     if (!colHidden) {
                         htmlEdit += '<td>';
                         switch (value.Type) {
@@ -265,7 +264,6 @@ var KoGridTable = (function (_super) {
             scriptEdit.innerHTML = htmlEdit;
             document.head.appendChild(scriptEdit);
         }
-
         // header template
         var scriptHeader = document.createElement("script");
         scriptHeader.setAttribute('id', this.idGrid + "_HeaderTmpl");
@@ -274,11 +272,11 @@ var KoGridTable = (function (_super) {
         $.each(this.columns, function (key, value) {
             var colHidden = typeof value.Hidden === 'undefined' ? false : true;
             var isCustomCol = typeof value.CustomColumn === 'undefined' ? false : true;
-
             if (isCustomCol) {
                 var c = "<th>" + value.Name + "</th>";
                 htmlHeader += value.CustomColumn ? c : "";
-            } else {
+            }
+            else {
                 htmlHeader += "<th data-column=\"" + value.Name + "\" data-bind=\"" + " visible: isVisible(" + !colHidden + ")\">" + value.Name + "";
                 htmlHeader += "<span >";
                 htmlHeader += "<i data-bind=\"attr: { class: iconType } \"></i>";
@@ -288,7 +286,6 @@ var KoGridTable = (function (_super) {
         htmlHeader += '</tr>';
         scriptHeader.innerHTML = htmlHeader;
         document.head.appendChild(scriptHeader);
-
         //paging template
         if (this.pagings !== null) {
             var scriptPaging = document.createElement("script");
@@ -305,7 +302,6 @@ var KoGridTable = (function (_super) {
                 htmlPaging += "<option value=\"" + (num2) + "\">" + (num2) + "</option>";
                 acum = num2;
             }
-
             htmlPaging += "</select></td>";
             htmlPaging += "<td colspan=\"6\">";
             htmlPaging += "<button data-bind=\"click: previousPage\" class=\"btn\"><i class=\"fa fa-angle-double-left\"></i></button>";
@@ -317,7 +313,6 @@ var KoGridTable = (function (_super) {
             scriptPaging.innerHTML = htmlPaging;
             document.head.appendChild(scriptPaging);
         }
-
         // alerts
         var clearDiv = document.createElement("div");
         clearDiv.setAttribute('class', 'clearfix');
@@ -330,31 +325,29 @@ var KoGridTable = (function (_super) {
         grid.parentNode.appendChild(clearDiv);
         grid.parentNode.appendChild(scriptAlert);
     };
-
     KoGridTable.prototype.isVisible = function (hidden) {
         return hidden;
     };
-
     KoGridTable.prototype.nextPage = function () {
         var totalCount = this.totalRows();
         if (((this.currentPageIndex() + 1) * this.pageSize()) < totalCount) {
             this.currentPageIndex(this.currentPageIndex() + 1);
-        } else {
+        }
+        else {
             this.currentPageIndex(0);
         }
         this.load();
     };
-
     KoGridTable.prototype.previousPage = function () {
         var totalCount = this.totalRows();
         if (this.currentPageIndex() > 0) {
             this.currentPageIndex(this.currentPageIndex() - 1);
-        } else {
+        }
+        else {
             this.currentPageIndex((Math.ceil(totalCount / this.pageSize())) - 1);
         }
         this.load();
     };
-
     KoGridTable.prototype.sortTable = function (viewModel, e) {
         var orderProp = $(e.target).attr("data-column");
         this.currentColumn(orderProp);
@@ -362,20 +355,17 @@ var KoGridTable = (function (_super) {
         this.sortType = (this.sortType === "asc") ? "desc" : "asc";
         this.iconType((this.sortType === "asc") ? "fa fa-sort-alpha-asc" : "fa fa-sort-numeric-desc");
     };
-
     KoGridTable.prototype.getCombosSources = function (dataSource) {
         return this.combosSources[dataSource];
     };
-
     KoGridTable.prototype.getDataSourece = function (url, method, model) {
         var _this = this;
         var ajax = new CallMethod();
         ajax.call({
             Url: url,
             Type: method,
-            dataType: "json"
+            dataType: "json",
         });
-
         ajax.result.done(function (data) {
             var array = [];
             $.each(data, function (index, value) {
@@ -384,11 +374,9 @@ var KoGridTable = (function (_super) {
                 m[model.DataValue] = ko.observable(value[model.DataValue]);
                 array.push(m);
             });
-
             _this.combosSources[model.Name] = array;
         });
     };
-
     KoGridTable.prototype.buidItemModel = function () {
         var _this = this;
         $.each(this.columns, function (key, value) {
@@ -407,7 +395,6 @@ var KoGridTable = (function (_super) {
             }
         });
     };
-
     KoGridTable.prototype.load = function () {
         var _this = this;
         var ajax = new CallMethod();
@@ -419,27 +406,22 @@ var KoGridTable = (function (_super) {
             PageIndex: this.currentPageIndex(),
             PageSize: this.pageSize()
         };
-
         ajax.call({
             Url: this.url,
             Type: "GET",
             dataType: "json",
             Param: data
         });
-
         ajax.result.done(function (result) {
             var dataRows = result.Rows;
-
             _this.totalRows(result.TotalRows);
             _this.collectionItems(dataRows);
-
             var calcTotalPage = Math.ceil((result.TotalRows / _this.pageSize())) - 1;
             _this.totalPages(calcTotalPage);
         });
     };
     return KoGridTable;
 })(BaseViewModel);
-
 // register web componet
 ko.components.register('ko-gridtable', {
     viewModel: {
@@ -478,15 +460,14 @@ ko.bindingHandlers.setCheckboxValue = {
         var value;
         var el = $(element);
         value = ko.utils.unwrapObservable(valueAccessor());
-
         if (stringToBoolean(value.text)) {
             el.prop('checked', true);
-        } else {
+        }
+        else {
             el.prop('checked', false);
         }
     }
 };
-
 var CallMethod = (function () {
     function CallMethod() {
         this.me = this;
@@ -498,7 +479,6 @@ var CallMethod = (function () {
         var vDataType = opt.dataType || 'json';
         var vType = opt.Type || "POST";
         var vAsync = opt.Async || true;
-
         var ajax = $.ajax({
             type: vType,
             dataType: vDataType,
@@ -510,7 +490,6 @@ var CallMethod = (function () {
             //processData: false,
             cache: false
         });
-
         this.result = ajax;
     };
     return CallMethod;

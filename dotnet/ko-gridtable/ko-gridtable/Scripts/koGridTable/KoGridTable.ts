@@ -3,7 +3,16 @@
 /// <reference path="../typings/knockout.viewmodel/knockout.viewmodel.d.ts" />
 /// <reference path="Interfaces.ts"/>
 /// <reference path="BaseViewModel.ts"/>
-
+/*
+Fraework Knockout 3.2.0 and Jquery 2.1.1 for build grid table with bootstrap 3.2.0 and fontawesome 4.2
+Autor: Hector Romano
+Date: 27/09/2014
+Twitter: @RomanoTulioHec
+Web Page: http://hromano.net
+GitHub: https://github.com/TulioHector/ko-gridtable
+Licence: GPL 3.0
+Version: 0.0.14
+*/
 'use strict';
 
 class KoGridTable extends BaseViewModel {
