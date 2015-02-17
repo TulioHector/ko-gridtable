@@ -80,6 +80,16 @@ Para utilizar web component el archivo js sampleGrid.js no es necesario, ya que 
                               Pagings { SelectorRang: ' 10-5' , SelectorName: ' number of items per page:' , Enable: true, NamePages: ' page ' , NameTotalCount: ' total ' , NameTotalPages: ' de ' }" id="prueba2">
                 </ko-gridtable>
 ```
+
+## Errors
+Para capturar los errores ocurridos se puede usar la propiedad de collback "CallbackError"
+```javascript
+function cathErrorGrid(msj, type) {
+    console.log(msj);
+    console.log(type);
+}
+```
+
 ## Nuget
 Esta libreria se encuentra tambien Nuget https://www.nuget.org/packages/Ko-GridTable/.
 ``` 

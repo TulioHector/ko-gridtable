@@ -6,7 +6,7 @@
 * Web Page: http://www.tulio-wiki.com.ar
 * GitHub: https://github.com/TulioHector/ko-gridtable
 * Licence: GPL 3.0
-* Version: 0.0.12
+* Version: 0.0.13
 */
 'use strict';
 var BaseViewModel = (function () {
@@ -15,6 +15,7 @@ var BaseViewModel = (function () {
         this.rowItem = {};
         this.collectionItems = ko.observableArray([]);
         this.selectedChoice = ko.observable("");
+        this.classTable = "";
         this.idGrid = params.Id;
     }
     BaseViewModel.prototype.templateToUse = function (item) {

@@ -20,7 +20,7 @@ class BaseViewModel {
     public collectionItems: KnockoutObservableArray<any> = ko.observableArray([]);
     public selectedChoice: KnockoutObservable<string> = ko.observable("");
     public columns: IColumns[];
-    public classTable: KnockoutObservable<string> = ko.observable("");
+    public classTable: string = "";
 
     constructor(params: IKoGridParams) {
         this.idGrid = params.Id;

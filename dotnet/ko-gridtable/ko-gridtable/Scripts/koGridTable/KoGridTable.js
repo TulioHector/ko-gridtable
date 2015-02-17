@@ -54,11 +54,6 @@ var KoGridTable = (function (_super) {
         this.save = this.save.bind(this);
         this.remove = this.remove.bind(this);
     }
-    KoGridTable.prototype.getClassTable = function () {
-        console.log(this.classTable);
-        return this.classTable;
-    };
-
     KoGridTable.prototype.save = function (row) {
         var _this = this;
         var rowdata = this.selectedItem();
@@ -382,7 +377,7 @@ ko.components.register('ko-gridtable', {
             return g;
         }
     },
-    template: '<table data-bind="attr: {class : getClassTable }" >' + '<thead data-bind="template: {name: templateHeader} ">' + '</thead>' + '<tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>' + '<tfoot data-bind="template: {name: templateFoot} ">' + '</tfoot>' + '</table>' + '<div class="pull-left">' + '<button data-bind="click: add" type="button" class="btn btn-default addrow">' + '<span class="fa fa-plus-square"></span>' + '</button>' + '</div>'
+    template: '<table data-bind="css: classTable" >' + '<thead data-bind="template: {name: templateHeader} ">' + '</thead>' + '<tbody data-bind="template: { name: templateToUse, foreach: currentPage}"></tbody>' + '<tfoot data-bind="template: {name: templateFoot} ">' + '</tfoot>' + '</table>' + '<div class="pull-left">' + '<button data-bind="click: add" type="button" class="btn btn-default addrow">' + '<span class="fa fa-plus-square"></span>' + '</button>' + '</div>'
 });
 ko.applyBindings();
 function stringToBoolean(string) {
